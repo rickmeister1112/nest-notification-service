@@ -1,0 +1,14 @@
+type UserDevice {
+    userId: String!
+    deviceId: String!
+}
+
+type Query {
+    getDevicesByUserId(userId: String!): [UserDevice!]!
+    getDeviceCountByUserId(userId: String!): Int!
+}
+
+type Mutation {
+    addDevice(userId: String!, deviceId: String!): UserDevice!
+    removeDevice(userId: String!, deviceId: String!): Boolean!
+}

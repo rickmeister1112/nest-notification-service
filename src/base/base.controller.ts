@@ -1,4 +1,4 @@
-import { Controller, Injectable, OnModuleInit } from "@nestjs/common";
+import { Controller, Injectable, OnModuleInit } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import {
   DynamoDBClient,
@@ -7,9 +7,11 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Mongoose } from 'mongoose';
-import { User } from '../entities/mysql/user.entity';
+import { UserNotificationMysql } from '../user-notification/user-notification.entity';
 import { MessageSchema } from '../entities/mongo/message.schema'; // MongoDB Message Schema
-import { deviceSchema } from '../entities/dynamo/device.schema'; // DynamoDB Schema
+import { deviceSchema } from '../user_device/device.schema';
+import { UserNotificationSchema } from '../entities/mongo/usernotification.schema';
+import { VendorEntity } from '../vendor/vendor.entity'; // DynamoDB Schema
 
 @Controller()
 @Injectable()
@@ -33,10 +35,17 @@ export class BaseController implements OnModuleInit {
     console.log(
       'Initializing BaseController: Checking and creating schemas...',
     );
+
     const schemas = [
-      { type: 'mysql', name: 'user', schema: User },
+      { type: 'mysql', name: 'user', schema: UserNotificationMysql },
       { type: 'dynamo', name: 'UserDeviceDB', schema: deviceSchema },
       { type: 'mongodb', name: 'Message', schema: MessageSchema },
+      {
+        type: 'mongodb',
+        name: 'UserNotification',
+        schema: UserNotificationSchema,
+      },
+      { type: 'mysql', name: 'vendor', schema: VendorEntity },
     ];
 
     for (const schema of schemas) {
@@ -45,7 +54,7 @@ export class BaseController implements OnModuleInit {
         await this.checkAndCreateTable(schema.type, schema.name, schema.schema);
       } catch (error) {
         console.error(
-          `Error processing ${schema.type} schema (${schema.name}): ${error.message}`,
+          `Error processing ${schema.type} schema (${schema.name}): ${error.message} the error is (${error})`,
         );
       }
     }
@@ -54,15 +63,26 @@ export class BaseController implements OnModuleInit {
 
   // MongoDB collection check and creation
   async checkAndCreateTableForMongoDB(schema: any, name: string) {
+    // Wait for mongoose to be connected
+    if (this.mongoose.connection.readyState !== 1) {
+      console.error('MongoDB connection is not yet established.');
+      return;
+    }
+
     console.log(`Checking MongoDB collection: ${name}`);
+
+    // List the collections and check if the desired collection exists
     const collectionExists = await this.mongoose.connection.db
       .listCollections({ name })
       .toArray();
 
     if (collectionExists.length === 0) {
       console.log(`MongoDB collection ${name} does not exist. Creating...`);
+
+      // Ensure the schema is defined and then create the collection
       const model = this.mongoose.model(name, schema);
-      // Insert a dummy document to create the collection
+
+      // Insert a dummy document to create the collection if it doesn't exist
       await model.create({
         message_id: 'dummy',
         priority: 'low',

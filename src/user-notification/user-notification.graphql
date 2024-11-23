@@ -1,0 +1,34 @@
+# user-notification.graphql
+type UserNotificationMysql {
+  id: ID!
+  userId: String!
+  pushNotificationEnabled: Boolean!
+  emailEnabled: Boolean!
+  smsEnabled: Boolean!
+  isBlacklisted: Boolean!
+}
+
+# Query to get user notification preferences
+type Query {
+  getUserNotification(userId: String!): UserNotificationMysql!
+}
+
+# Mutation to add a user notification preference
+type Mutation {
+  addUserNotification(
+    userId: String!
+    pushNotificationEnabled: Boolean!
+    emailEnabled: Boolean!
+    smsEnabled: Boolean!
+    isBlacklisted: Boolean!
+  ): UserNotificationMysql!
+
+  # Mutation to update user notification preferences
+  updateUserNotification(
+    userId: String!
+    pushNotificationEnabled: Boolean!
+    emailEnabled: Boolean!
+    smsEnabled: Boolean!
+    isBlacklisted: Boolean!
+  ): UserNotificationMysql!
+}

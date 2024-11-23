@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { User } from '../entities/mysql/user.entity';
+import { UserNotificationMysql } from '../user-notification/user-notification.entity';
 
 export const MySQLDataSource = new DataSource({
   type: 'mysql',
@@ -10,5 +10,5 @@ export const MySQLDataSource = new DataSource({
   database: process.env.MYSQL_DB || 'sys',
   synchronize: true, // Automatically syncs DB schema
   logging: true,
-  entities: [User], // Your entities go here
+  entities: [UserNotificationMysql], // Your entities go here
 });

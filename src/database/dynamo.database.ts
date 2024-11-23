@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class DynamoDatabaseService {
-  private dynamoDBClient: DynamoDBClient;
+  private readonly dynamoDBClient: DynamoDBClient;
 
   constructor() {
     // Initialize the DynamoDB Client with AWS credentials and region

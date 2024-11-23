@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRoot(
       process.env.MONGODB_URI ||
         'mongodb://localhost:27017/notification_service',
-    ), // MongoDB URI in .env
+    ),
   ],
   exports: [MongooseModule],
 })
