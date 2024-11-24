@@ -27,6 +27,7 @@ type UserDevice {
 
 type Query {
   getUserNotification(userId: String!): UserNotificationMysql!
+  getAllUsers: [UserNotificationMysql!]!
   getAllVendors: [VendorEntity!]!
   getVendorById(vendor_id: String!): VendorEntity!
   getDevicesByUserId(userId: String!): [UserDevice!]!

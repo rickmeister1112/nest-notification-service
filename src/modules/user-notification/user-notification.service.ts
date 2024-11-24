@@ -41,4 +41,8 @@ export class UserNotificationService {
   async getUserNotification(userId: string): Promise<UserNotificationMysql> {
     return this.userNotificationRepository.findOne({ where: { userId } });
   }
+
+  async getAllUsers(): Promise<UserNotificationMysql[]> {
+    return this.userNotificationRepository.find();
+  }
 }

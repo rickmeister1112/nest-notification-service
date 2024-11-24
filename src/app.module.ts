@@ -10,14 +10,15 @@ import {
   UserNotification,
   UserNotificationSchema,
 } from './entities/mongo/usernotification.schema';
-import { UserNotificationMysql } from './user-notification/user-notification.entity';
+import { UserNotificationMysql } from './modules/user-notification/user-notification.entity';
 import * as dotenv from 'dotenv';
 import { GraphQLModule } from '@nestjs/graphql';
-import { UserNotificationModule } from './user-notification/user-notification.module';
+import { UserNotificationModule } from './modules/user-notification/user-notification.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { VendorModule } from './vendor/vendor.module';
-import { VendorEntity } from './vendor/vendor.entity';
-import { UserDeviceModule } from './user_device/user_device.module';
+import { VendorModule } from './modules/vendor/vendor.module';
+import { VendorEntity } from './modules/vendor/vendor.entity';
+import { UserDeviceModule } from './modules/user_device/user_device.module';
+import { BullModule } from '@nestjs/bull';
 dotenv.config();
 
 @Module({
@@ -31,6 +32,15 @@ dotenv.config();
       database: process.env.MYSQL_DB,
       entities: [UserNotificationMysql, VendorEntity],
       synchronize: true,
+    }),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'main',
     }),
     // Log the MongoDB URI to check if it's being loaded correctly
     MongooseModule.forRoot('mongodb://localhost:27017/notification_service'),

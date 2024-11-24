@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { UserNotificationMysql } from '../user-notification/user-notification.entity';
+import { UserNotificationMysql } from '../modules/user-notification/user-notification.entity';
 
 export const MySQLDataSource = new DataSource({
   type: 'mysql',

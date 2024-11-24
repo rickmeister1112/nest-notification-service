@@ -1,0 +1,41 @@
+
+                              +-------------------+
+                              |  API Controller   |
+                              |  (MessageController)|
+                              +--------+----------+
+                                       |
+                                       v
+                              +-------------------+
+                              |   Message Service |
+                              |  (createMessage)  |
+                              +--------+----------+
+                                       |
+                                       v
+                              +-------------------+
+                              |     Main Queue    |
+                              | (Bull Queue)      |
+                              +--------+----------+
+                                       |
+                                       v
+                    +----------------------------+
+                    |        Queue Processor     |
+                    |  (MainQueueProcessor)      |
+                    +----------------------------+
+                                       |
+                                       v
+                              +-------------------+        +-------------------+
+                              | Email Queue       |        | SMS Queue         |
+                              | (Bull Queue)      |        | (Bull Queue)      |
+                              +--------+----------+        +--------+----------+
+                                       |                           |
+                                       v                           v
+                              +-------------------+        +-------------------+
+                              |   Email Processor |        |   SMS Processor   |
+                              |  (EmailProcessor) |        |  (SMSProcessor)   |
+                              +-------------------+        +-------------------+
+                                       |                           |
+                                       v                           v
+                            +---------------------+    +---------------------+
+                            |   Tracking Service  |    |   Tracking Service  |
+                            |   (updateStatus)    |    |   (updateStatus)    |
+                            +---------------------+    +---------------------+

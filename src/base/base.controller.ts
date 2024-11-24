@@ -7,11 +7,11 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Mongoose } from 'mongoose';
-import { UserNotificationMysql } from '../user-notification/user-notification.entity';
+import { UserNotificationMysql } from '../modules/user-notification/user-notification.entity';
 import { MessageSchema } from '../entities/mongo/message.schema'; // MongoDB Message Schema
-import { deviceSchema } from '../user_device/device.schema';
+import { deviceSchema } from '../modules/user_device/device.schema';
 import { UserNotificationSchema } from '../entities/mongo/usernotification.schema';
-import { VendorEntity } from '../vendor/vendor.entity'; // DynamoDB Schema
+import { VendorEntity } from '../modules/vendor/vendor.entity'; // DynamoDB Schema
 
 @Controller()
 @Injectable()

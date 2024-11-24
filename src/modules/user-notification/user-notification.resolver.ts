@@ -7,7 +7,6 @@ export class UserNotificationResolver {
   constructor(
     private readonly userNotificationService: UserNotificationService,
   ) {}
-
   // Query to get user notification preferences
   @Query(() => UserNotificationMysql)
   async getUserNotification(
@@ -32,7 +31,6 @@ export class UserNotificationResolver {
       isBlacklisted,
     });
   }
-
   // Mutation to update user notification preferences
   @Mutation(() => UserNotificationMysql)
   async updateUserNotification(
@@ -48,5 +46,9 @@ export class UserNotificationResolver {
       smsEnabled,
       isBlacklisted,
     });
+  }
+  @Query(() => [UserNotificationMysql])
+  async getAllUsers(): Promise<UserNotificationMysql[]> {
+    return this.userNotificationService.getAllUsers();
   }
 }
