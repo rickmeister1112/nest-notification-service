@@ -19,6 +19,8 @@ import { VendorModule } from './modules/vendor/vendor.module';
 import { VendorEntity } from './modules/vendor/vendor.entity';
 import { UserDeviceModule } from './modules/user_device/user_device.module';
 import { BullModule } from '@nestjs/bull';
+import { BaseControllerModule } from './base/base.module';
+import { PushModule } from './modules/channels/push/push.module';
 dotenv.config();
 
 @Module({
@@ -42,20 +44,21 @@ dotenv.config();
     BullModule.registerQueue({
       name: 'main',
     }),
-    // Log the MongoDB URI to check if it's being loaded correctly
     MongooseModule.forRoot('mongodb://localhost:27017/notification_service'),
     MongooseModule.forFeature([
       { name: Message.name, schema: MessageSchema },
       { name: UserNotification.name, schema: UserNotificationSchema },
     ]),
     GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver, // Add the ApolloDriver
-      autoSchemaFile: 'schema.gql', // Automatically generate schema file
-      playground: true, // Enable GraphQL playground in development
+      driver: ApolloDriver,
+      autoSchemaFile: 'schema.gql',
+      playground: true,
     }),
     UserNotificationModule,
     VendorModule,
     UserDeviceModule,
+    BaseControllerModule,
+    PushModule,
   ],
   controllers: [AppController, BaseController],
   providers: [AppService, DynamoDatabaseService, BaseController],

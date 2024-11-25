@@ -10,7 +10,6 @@ export class UserNotificationService {
     private userNotificationRepository: Repository<UserNotificationMysql>,
   ) {}
 
-  // Add new user notification preferences
   async addUserNotification(
     userId: string,
     preferences: Partial<UserNotificationMysql>,
@@ -22,7 +21,6 @@ export class UserNotificationService {
     return this.userNotificationRepository.save(userNotification);
   }
 
-  // Update user notification preferences
   async updateUserNotification(
     userId: string,
     updateData: Partial<UserNotificationMysql>,
@@ -37,7 +35,6 @@ export class UserNotificationService {
     throw new Error('User notification settings not found');
   }
 
-  // Get user notification preferences
   async getUserNotification(userId: string): Promise<UserNotificationMysql> {
     return this.userNotificationRepository.findOne({ where: { userId } });
   }

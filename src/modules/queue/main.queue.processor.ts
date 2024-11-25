@@ -41,6 +41,7 @@ export class MainQueueProcessor {
       } catch (error) {
         console.error(`Error processing message for user ${userId}:`, error);
         // Optionally, track failures or retry the job
+        // we will use kafka so the dead letter queue will help
       }
     }
   }

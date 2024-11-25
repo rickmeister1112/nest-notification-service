@@ -14,7 +14,7 @@ export class NotificationSchedulerService {
   constructor(
     @InjectModel(Message.name) private readonly messageModel: Model<Message>,
     @InjectQueue('mainQueue') private readonly mainQueue: Queue,
-    private readonly userService: UserNotificationService, // Injecting UserService to get all users
+    private readonly userService: UserNotificationService,
   ) {}
 
   // Cron job to check for scheduled messages every minute
@@ -22,10 +22,9 @@ export class NotificationSchedulerService {
   async checkScheduledMessages() {
     const currentTime = new Date();
 
-    // Find messages that are scheduled for later and have not been sent
     const scheduledMessages = await this.messageModel.find({
-      scheduled_for_later: { $lte: currentTime }, // Scheduled for the current time or earlier
-      is_sent: false, // Only unsent messages
+      scheduled_for_later: { $lte: currentTime },
+      is_sent: false,
     });
 
     if (scheduledMessages.length === 0) {
@@ -36,19 +35,16 @@ export class NotificationSchedulerService {
       );
 
       for (const message of scheduledMessages) {
-        // Fetch all userIds
-        const allUsers = await this.userService.getAllUsers(); // Assuming you have this method
-        const userIds = allUsers.map((user) => user.userId); // Extracting user_ids
+        const allUsers = await this.userService.getAllUsers();
+        const userIds = allUsers.map((user) => user.userId);
 
-        // Add the message to the queue for all users
         await this.mainQueue.add('processMessage', {
           messageId: message.message_id,
           content: message.message_content,
-          userIds, // Send to all users
-          priority: message.priority, // Ensure that priority is maintained
+          userIds,
+          priority: message.priority,
         });
 
-        // Mark the message as sent in MongoDB
         message.is_sent = true;
         await message.save();
       }

@@ -6,13 +6,11 @@ import { VendorEntity } from './vendor.entity'; // MySQL entity for Vendor
 export class VendorResolver {
   constructor(private readonly vendorService: VendorService) {}
 
-  // Query to get all vendors
   @Query(() => [VendorEntity])
   async getAllVendors(): Promise<VendorEntity[]> {
     return this.vendorService.getAllVendors();
   }
 
-  // Query to get a vendor by ID
   @Query(() => VendorEntity)
   async getVendorById(
     @Args('vendor_id') vendor_id: string,
@@ -20,7 +18,6 @@ export class VendorResolver {
     return this.vendorService.getVendorById(vendor_id);
   }
 
-  // Mutation to create a new vendor
   @Mutation(() => VendorEntity)
   async createVendor(
     @Args('vendor_name') vendor_name: string,
@@ -36,7 +33,6 @@ export class VendorResolver {
     });
   }
 
-  // Mutation to update an existing vendor
   @Mutation(() => VendorEntity)
   async updateVendor(
     @Args('vendor_id') vendor_id: string,

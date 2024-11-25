@@ -10,12 +10,10 @@ export class VendorService {
     private readonly vendorRepository: Repository<VendorEntity>,
   ) {}
 
-  // Fetch all vendors
   async getAllVendors(): Promise<VendorEntity[]> {
     return this.vendorRepository.find();
   }
 
-  // Fetch a single vendor by ID
   async getVendorById(vendor_id: string): Promise<VendorEntity> {
     const vendor = await this.vendorRepository.findOne({
       where: { vendor_id },
@@ -26,13 +24,11 @@ export class VendorService {
     return vendor;
   }
 
-  // Create a new vendor
   async createVendor(vendorData: Partial<VendorEntity>): Promise<VendorEntity> {
     const newVendor = this.vendorRepository.create(vendorData);
     return this.vendorRepository.save(newVendor);
   }
 
-  // Update an existing vendor
   async updateVendor(
     vendor_id: string,
     updateData: Partial<VendorEntity>,
